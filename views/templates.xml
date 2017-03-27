@@ -1,0 +1,156 @@
+<odoo>
+  <data>
+    <!-- Inclusions JS et CSS -->
+    <template id="website_style_criteria" name="Website Sale Criteria" inherit_id="website.assets_frontend">
+      <xpath expr="link[last()]" position="after">
+        <link rel="stylesheet" href="/website_sale_criteria/static/src/less/website_sale_criteria.less" type="text/less"/>
+      </xpath>
+      <xpath expr="//script[last()]" position="after">
+        <script type="text/javascript" src="/website_sale_criteria/static/src/js/website_sale_criteria.js"/>
+      </xpath>
+    </template>
+    <!-- Template variants reformater pour les différents critères -->
+    <template id="criterias"  inherit_id="website_sale.variants">
+      <xpath expr="//ul" position="replace">
+        <ul t-attf-class="list-unstyled js_add_cart_variants #{ul_class}" t-att-data-attribute_value_ids="attribute_value_ids">
+          <li>
+            <t t-call="website_sale_criteria.criterias_list" />
+          </li>
+        </ul>
+      </xpath>
+    </template>
+    <!-- Liste de critères pour les produits -->
+    <template id="criterias_list">
+      <li>
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 col-sm-7">
+              <t t-call="website_sale_criteria.criteria_accordion" />
+            </div>
+            <div class="col-xs-12 col-sm-5">
+              <t t-call="website_sale_criteria.criteria_preview" />
+            </div>
+          </div>
+        </div>
+      </li>
+    </template>
+    <!-- Accordéon pour les critères -->
+    <template id="criteria_accordion">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <t t-foreach="product.attribute_line_ids.sorted(key=lambda x: x.attribute_id.sequence)" t-as="variant_id">
+          <div class="panel panel-default" t-if="len(variant_id.value_ids) > 1">
+            <div class="panel-heading" role="tab" t-att-id="'heading-%d' % (variant_id.attribute_id.id)">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" t-att-id="variant_id.attribute_id.id"
+                  data-parent="#accordion"
+                  t-att-href="'#value-%d' % (variant_id.attribute_id.id)">
+                  <strong t-field="variant_id.attribute_id.name"/> -
+                </a>
+              </h4>
+            </div>
+            <div t-att-id="'value-%d' % (variant_id.attribute_id.id)"
+              class="panel-collapse collapse in" role="tabpanel"
+              t-att-aria-labelledby="'#heading-%d' % (variant_id.attribute_id.id)">
+              <t t-call="website_sale_criteria.selectors" />
+            </div>
+          </div>
+        </t>
+      </div>
+    </template>
+    <!-- Listes des sélécteurs de critères -->
+    <template id="selectors">
+      <!-- select || hidden -->
+      <t t-if="variant_id.attribute_id.type in ['select', 'hidden']">
+        <div class="panel-body">
+          <select t-attf-class="form-control #{'js_variant_change' if variant_id.attribute_id.create_variant else ''}"
+            t-att-name="'attribute-%s-%s' % (product.id, variant_id.attribute_id.id)">
+            <t t-foreach="variant_id.value_ids" t-as="value_id">
+              <option t-att-value="value_id.id">
+                <span t-field="value_id.name"/>
+                <span t-if="value_id.price_extra">
+                  <t t-esc="value_id.price_extra > 0 and '+' or ''"/>
+                  <span t-field="value_id.price_extra" style="white-space: nowrap;" t-options='{
+                    "widget": "monetary",
+                    "from_currency": product.currency_id,
+                    "display_currency": website.currency_id
+                    }'/>
+                </span>
+              </option>
+            </t>
+          </select>
+        </div>
+      </t>
+      <!-- radio -->
+      <t t-if="variant_id.attribute_id.type == 'radio'">
+        <ul class="list-group list-radio">
+          <t t-set="inc" t-value="0"/>
+          <t t-foreach="variant_id.value_ids" t-as="value_id">
+            <li class="list-group-item form-group js_attribute_value">
+              <label class="control-label control-radio">
+                <span t-field="value_id.name"/>
+                <span class="badge" t-if="value_id.price_extra">
+                  <t t-esc="value_id.price_extra > 0 and '+' or ''"/>
+                  <span t-field="value_id.price_extra" t-options='{
+                    "widget": "monetary",
+                    "from_currency": product.currency_id,
+                    "display_currency": website.currency_id
+                    }'/>
+                </span>
+                <input type="radio"
+                  t-att-class="'js_variant_change' if variant_id.attribute_id.create_variant else None"
+                  t-att-checked="'checked' if not inc else None"
+                  t-att-name="'attribute-%s-%s' % (product.id, variant_id.attribute_id.id)"
+                  t-att-value="value_id.id" />
+              </label>
+            </li>
+            <t t-set="inc" t-value="inc+1"/>
+          </t>
+        </ul>
+      </t>
+      <!-- Colors -->
+      <t t-if="(variant_id.attribute_id.type == 'color' and variant_id.attribute_id.name != 'Texture')">
+        <ul class="list-group list-color">
+          <t t-set="inc" t-value="0"/>
+          <li t-foreach="variant_id.value_ids" t-as="value_id" class="list-group-item">
+            <div class="variant-value" t-att-id="value_id.id">
+              <span class="value-color" t-attf-style="background-color:#{value_id.html_color or value_id.name}"/>
+              <span class="value-text" t-field="value_id.name"/>
+              <input type="radio"
+                t-att-checked="'checked' if not inc else None"
+                t-att-name="'attribute-%s-%s' % (product.id, variant_id.attribute_id.id)"
+                t-att-value="value_id.id"
+                t-att-class="'js_variant_change' if variant_id.attribute_id.create_variant else None" />
+            </div>
+            <t t-set="inc" t-value="inc+1"/>
+          </li>
+        </ul>
+      </t>
+      <!-- radio texture -->
+      <t t-if="(variant_id.attribute_id.type == 'color' and variant_id.attribute_id.name == 'Texture')">
+        <ul class="list-group list-texture">
+          <t t-set="inc" t-value="0"/>
+          <li t-foreach="variant_id.value_ids" t-as="value_id" class="list-group-item">
+            <div class="variant-value" t-att-id="value_id.id">
+              <img class="value-img" t-att-src="'/website_sale_criteria/static/src/img/%s.png' % (value_id.name)"/>
+              <span class="value-text" t-field="value_id.name"/>
+              <input type="radio"
+                t-att-checked="'checked' if not inc else None"
+                t-att-name="'attribute-%s-%s' % (product.id, variant_id.attribute_id.id)"
+                t-att-value="value_id.id"
+                t-att-class="'js_variant_change' if variant_id.attribute_id.create_variant else None" />
+            </div>
+            <t t-set="inc" t-value="inc+1"/>
+          </li>
+        </ul>
+      </t>
+    </template>
+    <!-- Prévisualisation des critères séléctionnés -->
+    <template id="criteria_preview">
+      <t t-foreach="product.attribute_line_ids.sorted(key=lambda x: x.attribute_id.sequence)" t-as="variant_id">
+        <div id="variant-preview" t-if="variant_id.attribute_id.name == 'Texture'">
+          <img class="preview-img"/>
+        </div>
+      </t>
+    </template>
+  </data>
+</odoo>
