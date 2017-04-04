@@ -11,7 +11,7 @@ Implémentation pour Aquilog""",
     'description': """
 Custom criteria for website products
     """,
-    'depends': ['website', 'website_sale'],
+    'depends': ['website_sale'],
     'data': [
         'views/templates.xml',
     ],
