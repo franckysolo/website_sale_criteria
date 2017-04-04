@@ -1,0 +1,1 @@
+montage -geometry 200x125+0+0 *.png colors.png
