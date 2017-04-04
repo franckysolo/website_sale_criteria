@@ -90,6 +90,7 @@ odoo.define('website_sale_criteria.widget', function (require) {
              var current = $(item);
              self.display_text_preview(current, name, value);
            });
+           self.hide_panel(panel);
           }
         }
       });
