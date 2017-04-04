@@ -38,7 +38,7 @@
     <template id="criteria_accordion">
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <t t-foreach="product.attribute_line_ids.sorted(key=lambda x: x.attribute_id.sequence)" t-as="variant_id">
-          <div class="panel panel-default" t-if="len(variant_id.value_ids) > 0">
+          <div class="panel panel-default" t-if="len(variant_id.value_ids) > 1">
             <div class="panel-heading" role="tab" t-att-id="'heading-%d' % (variant_id.attribute_id.id)">
               <h4 class="panel-title">
                 <a data-toggle="collapse" t-att-id="variant_id.attribute_id.id"

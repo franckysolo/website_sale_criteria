@@ -5,6 +5,10 @@ Final implementation for Aquilog
 
 ### Modification 04/04/2017  
 
+#### Bug Installation
+Le bug d'install du module original est sûrement du à l'absence du fichier `__init__.py`
+Fichier ajoutée -> plus d'erreur à la compile
+
 #### Demandes valides
 * En entrant sur la page l'accordéon est replié - Done!
 * le clic sur un titre d'option déploie son accordéon - Done!
@@ -26,6 +30,8 @@ A confirmer!
 #### Informations
 *Voir s'il est possible en interface graphique de tenir compte des tarifs des variantes :*
 * Dans l'administration Cliquer sur vente
-* Puis Variante d'articles
-* Les variantes  d'articles sont créées automatiquement à chaque ajout de variantes
+* Puis Articles
+* Séléctionner un article avec variantes (En haut à gauche de la fiche article)
+* Cliquez sur l'onglet Prix de la variante
+* Une liste des variantes de l'article est disponible avec son prix
 * Il faut donc modifier les prix en fonction des variantes
