@@ -31,7 +31,7 @@ A confirmer!
 *Voir s'il est possible en interface graphique de tenir compte des tarifs des variantes :*
 * Dans l'administration Cliquer sur vente
 * Puis Articles
-* Séléctionner un article avec variantes (En haut à gauche de la fiche article)
-* Cliquez sur l'onglet Prix de la variante
+* Séléctionner un article avec variantes
+* Cliquez sur l'onglet Prix de la variante (En haut à gauche de la fiche article)
 * Une liste des variantes de l'article est disponible avec son prix
 * Il faut donc modifier les prix en fonction des variantes
