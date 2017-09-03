@@ -17,6 +17,7 @@ odoo.define('website_sale_criteria.widget', function (require) {
       });
     },
     start: function () {
+      console.info('bonjour le monde');
       // selector
       this.select_change();
       // color and texture
@@ -35,6 +36,7 @@ odoo.define('website_sale_criteria.widget', function (require) {
             var image = $(this).find('img:first');
             var panel = input.closest('.panel-collapse');
             var name = panel.prev().find('strong').html();
+            span.removeClass('hide');
             if (image.length > 0) {
               var src = image.attr('src');
               self.display_texture(name, src);
