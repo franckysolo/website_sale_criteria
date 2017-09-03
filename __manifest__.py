@@ -14,6 +14,7 @@ Custom criteria for website products
     'depends': ['website_sale'],
     'data': [
         'views/templates.xml',
+        'views/confirm_project.xml',
     ],
     'installable': True,
     'application': False

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="confirm_project">
+            <t t-call="website.layout">
+                <div class="container mt16">
+                    <div class="alert alert-info">
+                        <p>
+                            <span class="fa fa-info"></span>
+                            Your project has been register, you will be contact by our commercial employee
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
